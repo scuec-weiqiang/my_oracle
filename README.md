@@ -1,7 +1,7 @@
 # Oracle-MNIST CNN Classifier
 
 ## 项目简介
-本项目是一个基于轻量级卷积神经网络（CNN）的手写字符分类器，使用 **Oracle-MNIST** 数据集进行训练和测试。Oracle-MNIST 是一个开源数据集，包含了类似 MNIST 的手写字符图像，适用于图像分类任务。
+本项目是一个基于轻量级卷积神经网络（CNN）的手写甲骨文字符分类器，使用 **Oracle-MNIST** 数据集进行训练和测试。Oracle-MNIST 是一个开源数据集，包含了类似 MNIST 的手写甲骨文字符图像，适用于图像分类任务。
 
 ## 数据集说明
 本项目所使用的 **Oracle-MNIST** 数据集为开源数据集，供研究和教学使用。数据集格式与标准 MNIST 数据集一致，包含 28×28 灰度手写字符图像。
@@ -48,7 +48,7 @@ python src/train.py
 训练完成后，可使用以下命令评估模型的准确性：
 
 ```bash
-python src/evaluate.py
+python src/test.py
 ```
 
 ## 训练结果
