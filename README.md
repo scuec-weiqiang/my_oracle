@@ -56,6 +56,9 @@ python src/evaluate.py
 
 ![训练结果](Figure_1.png)
 
+测试集结果如下图所示
+![训练结果](oracle_results.png)
+
 ## 许可证
 本项目遵循 MIT 许可证，具体内容请参考 `LICENSE` 文件。
 
