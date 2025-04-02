@@ -1,93 +1,62 @@
-# Oracle-MNIST
+# Oracle-MNIST CNN Classifier
 
-[![Readme-CN](https://img.shields.io/badge/README-中文-green.svg)](README.zh-CN.md)
+## 项目简介
+本项目是一个基于轻量级卷积神经网络（CNN）的手写字符分类器，使用 **Oracle-MNIST** 数据集进行训练和测试。Oracle-MNIST 是一个开源数据集，包含了类似 MNIST 的手写字符图像，适用于图像分类任务。
 
-`Oracle-MNIST` dataset comprises of 28×28 grayscale images of 30,222 ancient characters from 10 categories, for benchmarking pattern classification, with particular challenges on image noise and distortion. The training set totally consists of 27,222 images, and the test set contains 300 images per class. 
+## 数据集说明
+本项目所使用的 **Oracle-MNIST** 数据集为开源数据集，供研究和教学使用。数据集格式与标准 MNIST 数据集一致，包含 28×28 灰度手写字符图像。
 
-**1. Easy-of-use.** `Oracle-MNIST` shares the same data format with [the original MNIST dataset](http://yann.lecun.com/exdb/mnist/), allowing for direct compatibility with all existing classiﬁers and systems.
+请确保数据集的使用符合其许可协议，并尊重原始数据集提供者的权益。
 
-**2. Real-world challenge.** `Oracle-MNIST` constitutes a more challenging classification task than MNIST. The images of oracle characters suffer from 1) extremely serious and unique noises caused by three- thousand years of burial and aging and 2) dramatically variant writing styles by ancient Chinese, which all make them realistic for machine learning research. 
+## 依赖环境
+本项目基于 `PyTorch` 进行模型训练，使用 Python 3.13.2 版本，并安装以下依赖项：
 
-Oracle characters are the oldest hieroglyphs in China. Here's an example of how the data looks (*each class takes two-rows*):
-<div align=center>
-<img src="https://raw.githubusercontent.com/wm-bupt/images/main/oracle-mnist.png" width="800">
-</div>
-
-## Get the Data
-
-You can directly download the dataset from [Google drive](https://drive.google.com/drive/folders/1JtckCILRwVloa54_DQA5zBTv4e5NJCgs?usp=sharing) or [Baidu drive](https://pan.baidu.com/s/1HXbr-23ib4aISOQKXy3HzQ) (code: 5pq5). The data is stored in the **same** format as the original MNIST data. The result files are listed in following table.
-
-| Name  | Content | Examples | Size |
-| --- | --- |--- | --- |
-| `train-images-idx3-ubyte.gz`  | training set images  | 27,222|12.4 MBytes |
-| `train-labels-idx1-ubyte.gz`  | training set labels  |27,222|13.7 KBytes |
-| `t10k-images-idx3-ubyte.gz`  | test set images  | 3,000|1.4 MBytes |
-| `t10k-labels-idx1-ubyte.gz`  | test set labels  | 3,000| 1.6 KBytes |
-
-Alternatively, you can clone this GitHub repository; the dataset appears under `data/oracle`. This repo also contains some scripts for benchmark.
-
-`Note`: All of the scanned images in Oracle-MNIST are preprocessed by the following conversion pipeline. We also make the original images available and left the data processing job to the algorithm developers. You can download the original images from [Google drive](https://drive.google.com/file/d/1gPYAOc9CTvrUQFCASW3oz30lGdKBivn5/view?usp=sharing) or [Baidu drive](https://pan.baidu.com/s/15nPiaQ-HwcvfZx_o0qAaoQ) (code: 7aem).
-<div align=center>
-<img src="https://raw.githubusercontent.com/wm-bupt/images/main/convert.png" width="700">
-</div>
-
-## Usage
-
-### Loading data with Python (requires [NumPy](http://www.numpy.org/))
-
-Use `src/mnist_reader` in this repo:
-```python
-import mnist_reader
-x_train, y_train = mnist_reader.load_data('data/oracle', kind='train')
-x_test, y_test = mnist_reader.load_data('data/oracle', kind='t10k')
-```
-
-### Loading data with Tensorflow
-Make sure you have [downloaded the data](#get-the-data) and placed it in `data/oracle`. Otherwise, *Tensorflow will download and use the original MNIST.*
-```python
-from tensorflow.examples.tutorials.mnist import input_data
-data = input_data.read_data_sets('data/oracle')
-
-data.train.next_batch(BATCH_SIZE)
-```
-
-`Note`:This official packages `tensorflow.examples.tutorials.mnist.input_data` would split training data into two subset: 22,222 samples are used for training, and 5,000 samples are left for validation. You can instead use `src/mnist_reader_tf` in this repo to load data. The number of validation data can be arbitrarily changed by varying the value of `valid_num`: 
-```python
-import mnist_reader_tf as mnist_reader
-data = mnist_reader.read_data_sets('data/oracle', one_hot=True, valid_num=0)
-
-data.train.next_batch(BATCH_SIZE)
-```
-
-## How to train it
-
-You can reproduce the results of CNN by running `src/train_pytorch.py` or `src/train_tensorflow_keras.py`, and reproduce the results of other machine learning algorithms by running `benchmark/runner.py` provided by [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist/tree/master/benchmark).
-
-CNN (pytorch)：
 ```bash
-python train_pytorch.py --lr 0.1 --epochs 15 --net Net1 --data-dir ../data/oracle/
+pip install torch torchvision numpy matplotlib pillow
 ```
 
-CNN (tensorflow+keras)：
+## 代码结构
+```
+.
+├── data/                  # 存放 Oracle-MNIST 数据集
+├── src/
+│   ├── mnist_reader.py    # 读取 MNIST 格式的数据集
+│   ├── dataset.py         # 定义 PyTorch Dataset 类
+│   ├── model.py           # 定义 CNN 模型
+│   ├── train.py           # 训练模型
+│   ├── evaluate.py        # 评估模型
+├── oracle_cnn.pth         # 训练好的模型
+├── README.md              # 项目说明文件
+```
+
+## 运行方式
+### 1. 数据准备
+请下载 Oracle-MNIST 数据集，并解压到 `data/` 目录下。数据文件应包含：
+- `train-images-idx3-ubyte.gz`
+- `train-labels-idx1-ubyte.gz`
+- `t10k-images-idx3-ubyte.gz`
+- `t10k-labels-idx1-ubyte.gz`
+
+### 2. 训练模型
+运行以下命令以训练 CNN 模型：
+
 ```bash
-python train_tensorflow_keras.py --lr 0.1 --epochs 15 --data-dir ../data/oracle/
+python src/train.py
 ```
 
-## Citing Oracle-MNIST
-If you use Oracle-MNIST in a scientific publication, we would appreciate references to the following paper:
+### 3. 评估模型
+训练完成后，可使用以下命令评估模型的准确性：
 
-**A dataset of oracle characters for benchmarking machine learning algorithms. Mei Wang, Weihong Deng. [Scientific Data](https://www.nature.com/articles/s41597-024-02933-w)**
-
-Biblatex entry:
-```latex
-@article{wang2024dataset,
-  title={A dataset of oracle characters for benchmarking machine learning algorithms},
-  author={Wang, Mei and Deng, Weihong},
-  journal={Scientific Data},
-  volume={11},
-  number={1},
-  pages={87},
-  year={2024},
-  publisher={Nature Publishing Group UK London}
-}
+```bash
+python src/evaluate.py
 ```
+
+## 训练结果
+训练过程中，损失函数和准确率的变化如下图所示：
+
+![训练结果](Figure_1.png)
+
+## 许可证
+本项目遵循 MIT 许可证，具体内容请参考 `LICENSE` 文件。
+
+**数据集来源**：请参考 Oracle-MNIST 官方页面，并确保使用符合其许可要求。

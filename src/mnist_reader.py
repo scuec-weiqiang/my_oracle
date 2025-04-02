@@ -1,3 +1,4 @@
+# from oracle-mnist
 def load_data(path, kind='train'):
     import os
     import gzip
